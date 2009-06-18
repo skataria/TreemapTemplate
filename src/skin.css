@@ -1,0 +1,93 @@
+/* CSS file */
+
+Application {
+  font-family:  Helvetica Neue;
+  font-size: 12;
+}
+
+.configurationSelector {
+  backgroundColor: #333;
+  borderStyle: solid;
+  corner-radius: 14;
+  color: #ffffff;
+  font-size: 14;
+}
+
+TreeMapControl {
+  font-color: #4C4C4C;
+  font-weight: bold;
+  highlight-colors: #EEE, #EEE;
+  midEncoded-color: #CCC;
+  minEncoded-color: #990000;
+  maxEncoded-color: #009900;
+  stroke-thicknesses: 0, 3, 0;
+  stroke-colors: #000000, #EEE;
+  text-align: center;
+  text-position: middle;
+}
+
+TreeMapZoomControl {
+  horizontal-gap: 20;
+  color: #000000;
+  font-size: 14;
+}
+
+.treeMapRollOver {
+  backgroundColor: #333;
+  borderStyle: solid;
+  corner-radius: 8;
+  font-color: #ffffff;
+  font-size: 10;
+}
+
+.title {
+  font-size: 28;
+  font-weight: bold;
+}
+
+.subTitle {
+  font-size: 18;
+}
+
+.detailLabel {
+  font-size: 18;
+}
+
+.detailValue {
+  font-size: 28;
+  font-weight: bold;
+}
+
+.dimensions{
+  font-size: 14;
+  color: #4C4C4C;
+}
+
+.selectedDimension{
+  font-size: 10;
+  color: #4C4C4C;
+}
+
+.treeMapZoomButton{
+  padding-left: 0;
+  padding-right: 0;
+  text-decoration: underline;
+}
+
+/*ScrollBar{
+  downArrowDisabledSkin: Embed(source='jukebox.swf', symbol='ScrollArrowDown_disabledSkin');
+  downArrowDownSkin: Embed(source='jukebox.swf', symbol='ScrollArrowDown_downSkin');
+  downArrowOverSkin: Embed(source="jukebox.swf", symbol="ScrollArrowDown_overSkin");
+  downArrowUpSkin: Embed(source="jukebox.swf", symbol="ScrollArrowDown_upSkin");
+  thumbDownSkin: Embed(source="jukebox.swf", symbol="ScrollThumb_downSkin");
+  thumbIcon: Embed(source="jukebox.swf", symbol="ScrollBar_thumbIcon");
+  thumbOverSkin: Embed(source="jukebox.swf", symbol="ScrollThumb_overSkin");
+  thumbUpSkin: Embed(source="jukebox.swf", symbol="ScrollThumb_upSkin");
+  trackSkin: Embed(source="jukebox.swf", symbol="ScrollTrack_Skin");
+  upArrowDisabledSkin: Embed(source="jukebox.swf", symbol="ScrollArrowUp_disabledSkin");
+  upArrowDownSkin: Embed(source="jukebox.swf", symbol="ScrollArrowUp_downSkin");
+  upArrowOverSkin: Embed(source="jukebox.swf", symbol="ScrollArrowUp_overSkin");
+  upArrowUpSkin: Embed(source="jukebox.swf", symbol="ScrollArrowUp_upSkin");
+}
+*/
+

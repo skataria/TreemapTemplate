@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+  width="430" height="390"
+  keyUp="onKeyUp(event)"
+  creationComplete="onCreationComplete()"
+  styleName="configurationSelector"
+  >
+
+  <mx:Script source="../controllers/SelectorController.as"/>
+
+  <mx:Label x="10" y="10" text="Configure your treemap" width="175"/>
+  <mx:Label x="10" y="32" text="Size By:"/>
+  <mx:List
+    id="sizeList"
+    x="41" y="59"
+    width="144" height="154"
+    allowMultipleSelection="false"
+    selectedIndex="-1"
+    labelField="name"
+    borderStyle="none"
+    backgroundAlpha="0"
+    selectionColor="#ffffff"
+    dataProvider="{configRef.sizeMeasures}"
+   />
+
+  <mx:Label x="236" y="32" text="Color By:"/>
+  <mx:List
+    id="colorList"
+    x="274" y="59"
+    width="144" height="154"
+    allowMultipleSelection="false"
+    selectedIndex="-1"
+    labelField="name"
+    borderStyle="none"
+    backgroundAlpha="0"
+    selectionColor="#ffffff"
+    dataProvider="{configRef.colorMeasures}"
+   />
+
+  <mx:Label x="10" y="221" text="Order treemap by:"/>
+  <mx:List
+    id="hierarchyList"
+    x="41" y="245"
+    width="377"  height="93"
+    allowMultipleSelection="false"
+    selectedIndex="-1"
+    labelField="name"
+    borderStyle="none"
+    backgroundAlpha="0"
+    selectionColor="#ffffff"
+    dataProvider="{configRef.layerHierarchy}"
+   />
+
+  <mx:Button x="355" y="351" label="OK" width="65" click="updateTreemap()"/>
+  <mx:Button x="274" y="351" label="Cancel" click="cancel()"/>
+
+</mx:Canvas>

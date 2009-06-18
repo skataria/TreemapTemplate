@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+  xmlns:controls="org.juicekit.visual.controls.*"
+  xmlns:renderers="org.juicekit.visual.renderers.*"
+  xmlns:local="views.*"
+  layout="vertical"
+  horizontalAlign="left"
+  verticalGap="5"
+  creationComplete="onInit()">
+
+  <mx:Style source="skin.css"/>
+
+  <mx:Script>
+    <![CDATA[
+      import views.TreemapRollOver;
+      import views.Selector;
+      import views.DetailView;
+
+      import controllers.StyleDetails;
+
+      import models.ConfigurationParametersMO;
+
+      import org.juicekit.events.DataMouseEvent;
+      import org.juicekit.util.helper.CSSUtil;
+      import org.juicekit.flare.vis.data.TreeMLReader;
+
+      import mx.utils.StringUtil;
+      import mx.binding.utils.BindingUtils;
+      import mx.rpc.events.ResultEvent;
+      import mx.rpc.events.FaultEvent;
+
+      import flare.vis.data.NodeSprite;
+
+      private var rollOver:TreemapRollOver;
+      private var detailView:DetailView;
+      private var rootNode:NodeSprite;
+
+      [Bindable]
+      public var currentPathString:String;
+
+      [Bindable]
+      public var config:ConfigurationParametersMO;
+
+      /*[Bindable]
+      public var styles:StyleDetails;*/
+
+      private function onInit():void {
+        rollOver = new TreemapRollOver();
+        legend.drawGradient(treemap.getStyle("minEncodedColor"), treemap.getStyle("midEncodedColor"), treemap.getStyle("maxEncodedColor"));
+
+        BindingUtils.bindProperty(rollOver, "nodeName", this, "currentPathString");
+
+        // Load an initial data set.
+        dataLoader.url = "data/econcensus.xml";
+        dataLoader.send();
+
+        //Load dynamic skin file
+        /*styles = new StyleDetails();*/
+
+        //Load config file and populate the data.
+        config = new ConfigurationParametersMO();
+      }
+
+      private function onLoadResult(event:ResultEvent):void {
+        treemap.data = TreeMLReader.read(event.result as XML);
+        rootNode = treemap.dataRoot;
+      }
+
+      private function onLoadFailed(event:FaultEvent):void{
+        trace("Unable to load data.");
+      }
+
+      private function onClick(event:DataMouseEvent):void{
+        const clickedNode:NodeSprite = event.sender as NodeSprite;
+        const targetDepth:int = zoomCtrl.depth + 1;
+        const targetNode:NodeSprite = getParentNode(clickedNode, targetDepth);
+
+        details.selectedNode = targetNode.data.name;
+        details.sizeField = treemap.sizeEncodingField;
+        details.sizeValue = targetNode.data[treemap.sizeEncodingField];
+
+        details.colorField = treemap.colorEncodingField;
+        details.colorValue = targetNode.data[treemap.colorEncodingField];
+        //trace("Color value: "+ details.colorValue);
+      }
+
+      private function onMouseOver(event:DataMouseEvent):void{
+        var node:NodeSprite = event.sender as NodeSprite;
+        currentPathString = fitText(getPathString(event.sender as NodeSprite));
+
+        rollOver.position( new Point(event.localX, event.localY)
+                                  , new Rectangle( treemap.x, treemap.y, treemap.width, treemap.height));
+
+        // Make the panel visible
+        treemap.addChild(rollOver);
+      }
+
+      private function onMouseOut(event:DataMouseEvent):void{
+        if (treemap.contains(rollOver)) {
+          treemap.removeChild(rollOver);
+        }
+      }
+
+      private function fitText(s:String):String {
+        const tf:TextField = new TextField();
+        tf.text = s;
+        var len:int = s.length;
+        var tm:TextLineMetrics = tf.getLineMetrics(0);
+        var totalLines:Number = Math.floor(70 / tm.height);
+        var totalHeight:Number = Math.ceil(tm.width / 200) * tm.height;
+        while (len > 0 && totalHeight > 70){
+          len = len -2;
+          s = s.substr(0, len) + "...";
+          trace("length is now: "+ s.length);
+          tf.text = s;
+          tm = tf.getLineMetrics(0);
+         totalHeight = Math.ceil(tm.width / 230) * tm.height;
+        }
+        return s;
+    }
+
+      private function getPathString(selNode:NodeSprite):String{
+        /*var targetDepth:int = treemap.minLabelDepth + 1;
+        trace("depth: "+targetDepth);
+        const targetNode:NodeSprite = getParentNode(selNode, targetDepth);
+        var path:Array = getNodePath(rootNode, targetNode);
+        path.push(targetNode);*/
+        var path:Array = getNodePath(rootNode, selNode);
+        path.push(selNode);
+        var rollOverLbl:String = "";
+        for(var i:int=0; i<path.length; i++){
+            if (i > 0)
+                rollOverLbl += " > ";
+            rollOverLbl += path[i].data.name;
+        }
+        //trace("Roll Over label is: "+rollOverLbl);
+        return rollOverLbl;
+      }
+
+      private function getNodePath(fromNode:NodeSprite, toNode:NodeSprite):Array {
+        var nodePathArray:Array;
+        var ix:int;
+
+        if (toNode !== fromNode) {
+          // Construct a path from node to root.
+          nodePathArray = new Array(toNode.depth);
+          ix = 0;
+
+          while (toNode.parentNode) {
+            nodePathArray[ix++] = toNode.parentNode;
+            toNode = toNode.parentNode;
+            //trace("Added: "+toNode.data.name);
+          }
+
+          nodePathArray.pop();
+
+          // Transform the path to root to node.
+          nodePathArray = nodePathArray.reverse();
+       }
+       else {
+        // Empty path.
+        nodePathArray = new Array();
+       }
+        return nodePathArray;
+      }
+
+      private function getParentNode(node:NodeSprite, atDepth:uint):NodeSprite {
+        var retVal:NodeSprite = node;
+        while (retVal.depth > atDepth) {
+          retVal = retVal.parentNode;
+        }
+        return retVal;
+      }
+
+      private function changeConfiguration(event:Event):void{
+        Selector.useConfiguration(config);
+      }
+
+    ]]>
+  </mx:Script>
+  <mx:HTTPService id="dataLoader"
+    resultFormat="e4x"
+    result="onLoadResult(event)"
+    fault="onLoadFailed(event)"
+  />
+
+  <!--
+  <mx:HTTPService id="skinLoader"
+    resultFormat="e4x"
+    result="onLoadParseSkin(event)"
+    fault="loadFailed(event)"
+  />
+  -->
+
+  <mx:Label text="Economic Census Data by NAICS comparing 1997 to 2002"
+    width="{treemap.width}"
+    height="40"
+    styleName="title"/>
+
+  <mx:HBox width="{treemap.width}" height="30" styleName="subTitle">
+    <mx:Label text="{'Sized by: '+ treemap.sizeEncodingField + ' - Colored by: '+ treemap.colorEncodingField}"/>
+    <mx:LinkButton label="change"
+      textDecoration="underline" click="changeConfiguration(event)"/>
+  </mx:HBox>
+
+  <controls:TreeMapZoomControl id="zoomCtrl"
+    width="{treemap.width}" height="40"
+    tree="{treemap}"
+    verticalScrollPolicy="off"
+  />
+
+  <mx:HBox>
+    <controls:TreeMapControl id="treemap"
+    width="670" height="520"
+    colorEncodingField="Em%"
+    labelEncodingField="name"
+    sizeEncodingField="Em"
+    minLabelDepth="1"
+    maxLabelDepth="1"
+    truncateToFit="true"
+    jkDataMouseOut="onMouseOut(event)"
+    jkDataMouseOver="onMouseOver(event)"
+    jkDataClick="onClick(event)"
+   />
+   <local:DetailView id="details"
+    width="270" height="250"
+   />
+  </mx:HBox>
+
+  <mx:HBox width="{treemap.width}" height="30">
+    <mx:Label text="{'Largest box= '}" width="100"/>
+    <mx:Spacer width="200"/>
+    <renderers:HLabeledGradient3 id="legend" width="300"/>
+  </mx:HBox>
+</mx:Application>

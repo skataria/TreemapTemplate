@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="230" height="70" styleName="treeMapRollOver" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+  <mx:Script>
+        <![CDATA[
+        import mx.binding.utils.ChangeWatcher;
+
+        private var watcher:ChangeWatcher;
+
+        [Bindable]
+        public var nodeName:String;
+
+        private static const offset:Point = new Point(10, 10);
+
+       /*private function init():void{
+          watcher = ChangeWatcher.watch(this, "nodeName", truncateText);
+        }
+
+        private function truncateText(event:Event):void{
+          trace("came in changewtacher handler.");
+          var tm:TextLineMetrics = textField.getLineMetrics(0);
+          var s:String = nodeName;
+          var len:int = nodeName.length;
+          //infinite loop
+          /*while(textField.textHeight > textField.height){
+            len = len - 2;
+            s = s.substr(0, len);
+            s = s + "...";
+          }*/
+          //nodeName = s;
+       // }
+
+         /*private function fitText(ts:TextSprite, s:String, maxW:Number):void {
+            const tf:TextField = ts.textField;
+            var len:int = s.length;
+            ts.text = s;
+            var tm:TextLineMetrics = tf.getLineMetrics(0);
+            while (len > 0 && tm.width > maxW) {
+              len = len - 2;  // Speed up the search.
+              s = s.substr(0, len);
+              ts.text = s + "…";
+              tm = tf.getLineMetrics(0);
+            }
+            // Scrub a zero length string.
+            if (len <= 0) {
+              ts.text = "";
+            }
+        }*/
+
+        public function position(mousePt:Point, boundsRect:Rectangle):void {
+            this.x = mousePt.x + offset.x;
+            this.y = mousePt.y + offset.y;
+
+            if ((this.x + this.width) > boundsRect.width) {
+              this.x = mousePt.x - offset.x - this.width;
+            }
+
+            if ((this.y + this.height) > boundsRect.height) {
+              this.y = mousePt.y - offset.y - this.height;
+            }
+          }
+        ]]>
+    </mx:Script>
+      <mx:Text id="textField" x="10" y="10" width="210" height="60" color="#eeeeee" text="{nodeName}"/>
+</mx:Canvas>

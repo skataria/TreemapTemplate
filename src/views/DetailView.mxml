@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="270" height="250">
+  <mx:Script>
+    <![CDATA[
+      [Bindable]
+      public var selectedNode:String;
+
+      [Bindable]
+      public var sizeValue:String;
+
+      [Bindable]
+      public var sizeField:String;
+
+      [Bindable]
+      public var colorField:String;
+
+      [Bindable]
+      public var colorValue:String;
+    ]]>
+  </mx:Script>
+
+  <mx:VBox>
+    <mx:Label width="270" text="{selectedNode}" styleName="detailLabel"/>
+    <mx:Label text="{sizeValue}" styleName="detailValue"/>
+    <mx:Label text="{sizeField}" styleName="detailLabel"/>
+    <mx:Spacer/>
+    <mx:Label text="{colorValue}" styleName="detailValue"/>
+    <mx:Label text="{colorField}" styleName="detailLabel"/>
+  </mx:VBox>
+</mx:Canvas>
