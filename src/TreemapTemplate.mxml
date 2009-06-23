@@ -12,6 +12,7 @@
 
   <mx:Script>
     <![CDATA[
+      import mx.binding.utils.ChangeWatcher;
       import views.TreemapRollOver;
       import views.Selector;
       import views.DetailView;
@@ -86,7 +87,7 @@
 
       private function onMouseOver(event:DataMouseEvent):void{
         var node:NodeSprite = event.sender as NodeSprite;
-        currentPathString = fitText(getPathString(event.sender as NodeSprite));
+        currentPathString = getPathString(event.sender as NodeSprite);
 
         rollOver.position( new Point(event.localX, event.localY)
                                   , new Rectangle( treemap.x, treemap.y, treemap.width, treemap.height));
@@ -101,7 +102,7 @@
         }
       }
 
-      private function fitText(s:String):String {
+     /* private function fitText(s:String):String {
         const tf:TextField = new TextField();
         tf.text = s;
         var len:int = s.length;
@@ -117,7 +118,7 @@
          totalHeight = Math.ceil(tm.width / 230) * tm.height;
         }
         return s;
-    }
+    }*/
 
       private function getPathString(selNode:NodeSprite):String{
         /*var targetDepth:int = treemap.minLabelDepth + 1;
@@ -176,6 +177,14 @@
         Selector.useConfiguration(config);
       }
 
+      private function scrollRight():void{
+        zoomCtrl.horizontalScrollPosition += 40;
+      }
+
+      private function scrollLeft():void{
+        zoomCtrl.horizontalScrollPosition -= 40;
+      }
+
     ]]>
   </mx:Script>
   <mx:HTTPService id="dataLoader"
@@ -198,23 +207,33 @@
     styleName="title"/>
 
   <mx:HBox width="{treemap.width}" height="30" styleName="subTitle">
-    <mx:Label text="{'Sized by: '+ treemap.sizeEncodingField + ' - Colored by: '+ treemap.colorEncodingField}"/>
+    <!--<mx:Label text="{'Sized by: '+ treemap.sizeEncodingField + ' - Colored by: '+ treemap.colorEncodingField}"/>colorEncodingField="Em%"
+    labelEncodingField="name"
+    sizeEncodingField="Em"-->
+    <mx:Label text="{'Sized by: '+ config.currentConfiguration.selSizeMeasure + ' - Colored by: '+ config.currentConfiguration.selColorMeasure}"/>
     <mx:LinkButton label="change"
       textDecoration="underline" click="changeConfiguration(event)"/>
   </mx:HBox>
 
-  <controls:TreeMapZoomControl id="zoomCtrl"
-    width="{treemap.width}" height="40"
+  <mx:Canvas width="{treemap.width}" height="40" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+    <controls:TreeMapZoomControl id="zoomCtrl"
+    width="{treemap.width - 100}" height="40"
     tree="{treemap}"
+    headers = "{config.currentConfiguration.layerHeaders}"
     verticalScrollPolicy="off"
-  />
+    horizontalScrollPolicy="off"
+    />
+    <mx:Button width="35" right="0" label="R" bottom="5" click="scrollRight()"/>
+    <mx:Button width="35" right="40" label="L" bottom="5" click="scrollLeft()"/>
+  </mx:Canvas>
+
 
   <mx:HBox>
     <controls:TreeMapControl id="treemap"
     width="670" height="520"
-    colorEncodingField="Em%"
+    colorEncodingField="{config.currentConfiguration.selColorMeasure}"
     labelEncodingField="name"
-    sizeEncodingField="Em"
+    sizeEncodingField="{config.currentConfiguration.selSizeMeasure}"
     minLabelDepth="1"
     maxLabelDepth="1"
     truncateToFit="true"
