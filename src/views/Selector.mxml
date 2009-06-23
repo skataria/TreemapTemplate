@@ -15,7 +15,7 @@
     x="41" y="59"
     width="144" height="154"
     allowMultipleSelection="false"
-    selectedIndex="-1"
+    selectedIndex="0"
     labelField="name"
     borderStyle="none"
     backgroundAlpha="0"
@@ -29,7 +29,7 @@
     x="274" y="59"
     width="144" height="154"
     allowMultipleSelection="false"
-    selectedIndex="-1"
+    selectedIndex="0"
     labelField="name"
     borderStyle="none"
     backgroundAlpha="0"
@@ -43,12 +43,12 @@
     x="41" y="245"
     width="377"  height="93"
     allowMultipleSelection="false"
-    selectedIndex="-1"
+    selectedIndex="0"
     labelField="name"
     borderStyle="none"
     backgroundAlpha="0"
     selectionColor="#ffffff"
-    dataProvider="{configRef.layerHierarchy}"
+    dataProvider="{configRef.hierarchies}"
    />
 
   <mx:Button x="355" y="351" label="OK" width="65" click="updateTreemap()"/>

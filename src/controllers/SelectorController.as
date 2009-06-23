@@ -30,23 +30,23 @@ private function onCreationComplete():void{
 private function setDefaults():void{
   if(selectedMeasures){
 
-    var selSizeIndex:int = -1;
+    var selSizeIndex:int = 0;
     if(sizeList.dataProvider && sizeList.dataProvider.length > 0){
       var source:Array = sizeList.dataProvider.source;
       for( var count:int =0; count < source.length; count++){
-        if(source[count].name == selectedMeasures.selSizeMeasure) selSizeIndex = count;
+        if(source[count].field == selectedMeasures.selSizeMeasure) selSizeIndex = count;
       }
     }
 
-    var selColorIndex:int = -1;
+    var selColorIndex:int = 0;
     if(colorList.dataProvider && colorList.dataProvider.length > 0){
       var src:Array = colorList.dataProvider.source;
       for( var cnt:int =0; cnt < src.length; cnt++){
-        if(src[cnt].name == selectedMeasures.selColorMeasure) selColorIndex = cnt;
+        if(src[cnt].field == selectedMeasures.selColorMeasure) selColorIndex = cnt;
       }
     }
 
-    var selHierIndex:int = -1;
+    var selHierIndex:int = 0;
     if(hierarchyList.dataProvider && hierarchyList.dataProvider.length > 0){
       var arr:Array = hierarchyList.dataProvider.source;
       for( var ix:int =0; ix < arr.length; ix++){
@@ -64,10 +64,10 @@ private function updateTreemap():void{
   //ToDo: Update the treemap with the selected configurations.
   selectedMeasures = new CurrentConfigurationMO();
   if(sizeList.selectedItem != null){
-    selectedMeasures.selSizeMeasure = sizeList.selectedItem.name;
+    selectedMeasures.selSizeMeasure = sizeList.selectedItem.field;
   }
   if(colorList.selectedItem != null){
-    selectedMeasures.selColorMeasure = colorList.selectedItem.name;
+    selectedMeasures.selColorMeasure = colorList.selectedItem.field;
   }
   if(hierarchyList.selectedItem != null){
     selectedMeasures.selLayerHierarchy = hierarchyList.selectedItem.name;
