@@ -37,7 +37,7 @@ TreeMapZoomControl {
   borderStyle: solid;
   corner-radius: 8;
   font-color: #ffffff;
-  font-size: 10;
+  font-size: 14;
 }
 
 .title {
@@ -73,21 +73,3 @@ TreeMapZoomControl {
   padding-right: 0;
   text-decoration: underline;
 }
-
-/*ScrollBar{
-  downArrowDisabledSkin: Embed(source='jukebox.swf', symbol='ScrollArrowDown_disabledSkin');
-  downArrowDownSkin: Embed(source='jukebox.swf', symbol='ScrollArrowDown_downSkin');
-  downArrowOverSkin: Embed(source="jukebox.swf", symbol="ScrollArrowDown_overSkin");
-  downArrowUpSkin: Embed(source="jukebox.swf", symbol="ScrollArrowDown_upSkin");
-  thumbDownSkin: Embed(source="jukebox.swf", symbol="ScrollThumb_downSkin");
-  thumbIcon: Embed(source="jukebox.swf", symbol="ScrollBar_thumbIcon");
-  thumbOverSkin: Embed(source="jukebox.swf", symbol="ScrollThumb_overSkin");
-  thumbUpSkin: Embed(source="jukebox.swf", symbol="ScrollThumb_upSkin");
-  trackSkin: Embed(source="jukebox.swf", symbol="ScrollTrack_Skin");
-  upArrowDisabledSkin: Embed(source="jukebox.swf", symbol="ScrollArrowUp_disabledSkin");
-  upArrowDownSkin: Embed(source="jukebox.swf", symbol="ScrollArrowUp_downSkin");
-  upArrowOverSkin: Embed(source="jukebox.swf", symbol="ScrollArrowUp_overSkin");
-  upArrowUpSkin: Embed(source="jukebox.swf", symbol="ScrollArrowUp_upSkin");
-}
-*/
-
