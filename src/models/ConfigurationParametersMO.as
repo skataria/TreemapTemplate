@@ -12,20 +12,35 @@ package models
   {
     public var sizeMeasures:ArrayCollection = null;
     public var colorMeasures:ArrayCollection = null;
-    public var layerHierarchy:ArrayCollection = null;
+    public var hierarchies:ArrayCollection = null;
     public var currentConfiguration:CurrentConfigurationMO = null;
-
-    /*
-    public var layerHeaders:ArrayCollection = null;
-    */
 
     public function ConfigurationParametersMO()
     {
-      //currentConfig = new CurrentConfigurationMO();
       function loadConfigSucceeded(event:ResultEvent):void{
-        sizeMeasures = new ArrayCollection(event.result.configuration.sizeSelectors.sizeField.source);
-        colorMeasures = new ArrayCollection(event.result.configuration.colorSelectors.colorField.source);
-        layerHierarchy = new ArrayCollection(event.result.configuration.orderBy.option.source);
+        sizeMeasures = new ArrayCollection(event.result.configuration.sizeFields.sizeField.source);
+        colorMeasures = new ArrayCollection(event.result.configuration.colorFields.colorField.source);
+        hierarchies = new ArrayCollection();
+
+        var hierAC:ArrayCollection = event.result.configuration.hierarchies.hierarchy;
+        for each(var hierarchy:Object in hierAC){
+          var lbl:String ="";
+          if(hierarchy.hasOwnProperty("name")){
+            lbl = hierarchy.name;
+          }
+          else{
+            var fldsAC:ArrayCollection = hierarchy.Field;
+            for(var i:int = 0; i < fldsAC.length; i++){
+              if(i > 0) lbl += " > ";
+              lbl += fldsAC[i].name;
+            }
+            hierarchy["name"] = lbl;
+          }
+          hierarchies.addItem(hierarchy);
+        }
+
+        getdefaultConfigurations();
+
       }
 
       function loadConfigFailed(event:FaultEvent):void{
@@ -38,5 +53,29 @@ package models
       loader.url = "data/templateConfiguration.xml";
       loader.send();
     }
+
+    private function  getdefaultConfigurations():void{
+      currentConfiguration = new CurrentConfigurationMO();
+
+      for each(var sizeField:Object in sizeMeasures){
+        if(sizeField.hasOwnProperty("default") && sizeField["default"] == true){
+          currentConfiguration.selSizeMeasure = sizeField.field;
+        }
+      }
+
+      for each(var colorField:Object in colorMeasures){
+        if(colorField.hasOwnProperty("default") && colorField["default"] == true){
+          currentConfiguration.selColorMeasure = colorField.field;
+        }
+      }
+
+      for each(var hierarchy:Object in hierarchies){
+        if(hierarchy.hasOwnProperty("default") && hierarchy["default"] == true){
+          currentConfiguration.selLayerHierarchy = hierarchy.name;
+        }
+      }
+
+    }
+
   }
 }
